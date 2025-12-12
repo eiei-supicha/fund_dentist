@@ -112,26 +112,4 @@ Route::middleware([
         });
     });
 
-Route::get('/setup-admin', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate --force');
-        echo "สร้างตาราง Database เรียบร้อยแล้ว<br>";
-
-        $email = 'admin@test.com'; // อีเมลสำหรับล็อกอิน
-        $password = '12345678';    // รหัสผ่าน
-
-        if (!\App\Models\User::where('email', $email)->exists()) {
-            $user = new \App\Models\User();
-            $user->name = 'Super Admin';
-            $user->email = $email;
-            $user->password = bcrypt($password);
-            $user->save();
-            echo "Create Admin ($email) success!";
-        } else {
-            echo " Admin have assiged";
-        }
-
-    } catch (\Exception $e) {
-        echo "Error: " . $e->getMessage();
-    }
 });
