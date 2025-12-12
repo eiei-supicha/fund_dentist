@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# 1. ติดตั้งโปรแกรมพื้นฐานที่จำเป็น (Git, Unzip, Zip)
+# 1. ติดตั้งโปรแกรมพื้นฐาน
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -10,13 +10,13 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip
 
-# 2. ล้าง Cache เพื่อลดขนาดไฟล์
+# 2. ล้าง Cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# 3. ติดตั้ง PHP Extensions ที่ Laravel ต้องใช้
+# 3. ติดตั้ง PHP Extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# 4. เปิดใช้งาน module rewrite ของ Apache (เพื่อให้ URL สวยๆ)
+# 4. เปิดใช้งาน module rewrite
 RUN a2enmod rewrite
 
 # 5. ติดตั้ง Composer
@@ -28,16 +28,19 @@ WORKDIR /var/www/html
 # 7. ก๊อปปี้ไฟล์โปรเจกต์
 COPY . .
 
-# 8. รันคำสั่งติดตั้ง (เพิ่ม flag เพื่อป้องกัน error บางอย่าง)
+# 8. สร้างไฟล์ Database เปล่าๆ ขึ้นมา (แก้ปัญหา File not exist)
+RUN touch database/database.sqlite
+
+# 9. รันคำสั่งติดตั้ง Composer
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# 9. แก้สิทธิ์การเข้าถึงไฟล์ (สำคัญมาก!)
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# 10. แก้สิทธิ์การเข้าถึงไฟล์ (เพิ่ม database เข้าไปเพื่อให้เขียนข้อมูลได้)
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
-# 10. ตั้งค่า Apache ให้ชี้ไปที่ public
+# 11. ตั้งค่า Apache
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# 11. เปิด Port 80
+# 12. เปิด Port 80
 EXPOSE 80
