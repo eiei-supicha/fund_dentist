@@ -107,26 +107,30 @@ class AppointmentController extends SearchableController
             $dentist = Dentist::find($data['dentist_id']);
             $patient = Patient::find($data['patient_id']);
 
-            // --- ตรวจสอบ conflict ช่วงเวลา 2 ชั่วโมง ---
-            $newStartTime = $data['appointment_time'];
-            $newEndTime = Carbon::parse($newStartTime)->addHours(2)->format('H:i:s');
-
-            $conflict = Appointment::where('dentist_id', $dentist->dentist_id)
-                ->where('appointment_date', $data['appointment_date'])
-                ->where(function ($query) use ($newStartTime, $newEndTime) {
-                    $query->where('appointment_time', '<', $newEndTime)
-                        ->whereRaw('ADDTIME(appointment_time, "02:00:00") > ?', [$newStartTime]);
-                })
-                ->exists();
+            // --- ตรวจสอบ conflict ---
+            $conflict = Appointment::where('appointment_date', $data['appointment_date'])
+            ->where('appointment_time', $data['appointment_time'])
+            ->where(function ($query) use ($dentist, $patient) {
+                // 2. ตรวจสอบว่า "หมอ" ไม่ว่าง หรือ "คนไข้" ไม่ว่าง
+                $query->where('dentist_id', $dentist->dentist_id)
+                    ->orWhere('patient_id', $patient->patient_id);
+            })
+            ->first(); // .first() เพื่อดึงข้อมูลแถวที่ชนมาเลย
 
             if ($conflict) {
-                return redirect()->back()->withInput()->withErrors([
-                    'alert' => 'This time slot overlaps with another appointment for the dentist (each appointment takes 2 hours)'
-                ]);
+                // ถ้ามีนัดซ้อน ให้เช็กว่าเป็นความผิดของใคร
+                if ($conflict->dentist_id == $dentist->dentist_id) {
+                    // ซ้อนเพราะ "หมอ" ไม่ว่าง
+                    return redirect()->back()->withInput()->withErrors([
+                        'alert' => 'This time slot overlaps with another appointment for the dentist (each appointment takes 2 hours)'
+                    ]);
+                } else {
+                    // ซ้อนเพราะ "คนไข้" ไม่ว่าง (ไปจองกับหมอคนอื่นไว้)
+                    return redirect()->back()->withInput()->withErrors([
+                        'alert' => 'The patient already has an overlapping appointment at this time on this day.'
+                    ]);
+                }
             }
-            // -------------------------------------------
-
-            // สร้าง appointment
             $appointment = new Appointment();
             $appointment->fill($data);
             $appointment->dentist()->associate($dentist);
@@ -168,28 +172,35 @@ class AppointmentController extends SearchableController
 
             // ตรวจสอบว่ามีการเปลี่ยนแปลงช่วงเวลา (วัน, เวลา, หรือทันตแพทย์)
             $timeSlotChanged = $data['appointment_date'] != $appointment->appointment_date ||
-                $data['appointment_time'] != $appointment->appointment_time ||
-                $data['dentist_id'] != $appointment->dentist_id;
+            $data['appointment_time'] != $appointment->appointment_time ||
+            $data['dentist_id'] != $appointment->dentist_id ||
+            $data['patient_id'] != $appointment->patient_id;
 
             if ($timeSlotChanged) {
-                $newStartTime = $data['appointment_time'];
-                $newEndTime = Carbon::parse($newStartTime)->addHours(2)->format('H:i:s');
+                $conflict = Appointment::where('appointment_date', $data['appointment_date'])
+                ->where('appointment_time', $data['appointment_time'])
+                ->where('appointment_id', '!=', $appointment->appointment_id) // <-- สำคัญมาก: ต้องไม่เช็กกับนัดหมายตัวนี้เอง
+                ->where(function ($query) use ($dentist, $patient) {
+                    // 2. ตรวจสอบว่า "หมอ" ไม่ว่าง หรือ "คนไข้" ไม่ว่าง
+                    $query->where('dentist_id', $dentist->dentist_id)
+                          ->orWhere('patient_id', $patient->patient_id);
+                })
+                ->first(); // .first() เพื่อดึงข้อมูลแถวที่ชนมาเลย
 
-                $conflict = Appointment::where('dentist_id', $dentist->dentist_id)
-                    ->where('appointment_date', $data['appointment_date'])
-                    ->where('appointment_id', '!=', $appointment->appointment_id)
-                    ->where(function ($query) use ($newStartTime, $newEndTime) {
-                        $query->where('appointment_time', '<', $newEndTime)
-                            ->whereRaw('ADDTIME(appointment_time, "02:00:00") > ?', [$newStartTime]);
-                    })
-                    ->exists();
-
-                if ($conflict) {
+            if ($conflict) {
+                if ($conflict->dentist_id == $dentist->dentist_id) {
+                    // ซ้อนเพราะ "หมอ" ไม่ว่าง
                     return redirect()->back()->withInput()->withErrors([
                         'alert' => 'This time slot overlaps with another appointment for the dentist (each appointment takes 2 hours)'
                     ]);
+                } else {
+                    // ซ้อนเพราะ "คนไข้" ไม่ว่าง (ไปจองกับหมอคนอื่นไว้)
+                    return redirect()->back()->withInput()->withErrors([
+                        'alert' => 'The patient already has an overlapping appointment at this time on this day.'
+                    ]);
                 }
             }
+        }
             // อัปเดตข้อมูล appointment
             $appointment->fill($data);
             $appointment->dentist()->associate($dentist);

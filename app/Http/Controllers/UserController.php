@@ -47,8 +47,7 @@ class UserController extends SearchableController
 
     function view(string $userEmail): View
     {
-        $user = User
-            ::where('email', $userEmail)->firstOrFail();
+        $user = User::where('email', $userEmail)->firstOrFail();
 
         Gate::authorize('view', $user);
 

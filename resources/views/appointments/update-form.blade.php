@@ -8,7 +8,7 @@
             {{-- Appointment Code (Readonly) --}}
             <div>
                 <label for="inp-code">Appointment Code
-                    <input type="text" id="inp-code" name="appointment_code" value="{{ old('appointment_code', $appointment->appointment_code) }}" readonly style="background-color: #eee;" />
+                    <input type="text" id="inp-code" name="appointment_code" value="{{ old('appointment_code', $appointment->appointment_code) }}"  />
                 </label>
             </div>
  
@@ -19,7 +19,7 @@
                         <option value="">-- Please select a dentist --</option>
                         @foreach($dentists as $dentist)
                             <option value="{{ $dentist->dentist_id }}"
-                                @selected($dentist->dentist_id === old('dentist_id', $appointment->dentist_id))>
+                                @selected($dentist->dentist_id == old('dentist_id', $appointment->dentist_id))>
                                 {{ $dentist->dentist_name }}
                             </option>
                         @endforeach
@@ -34,7 +34,7 @@
                         <option value="">-- Please select a patient --</option>
                         @foreach($patients as $patient)
                             <option value="{{ $patient->patient_id }}"
-                                @selected($patient->patient_id === old('patient_id', $appointment->patient_id))>
+                                @selected($patient->patient_id == old('patient_id', $appointment->patient_id))>
                                 ({{ $patient->patient_code }}){{ $patient->patient_name }}
                             </option>
                         @endforeach
@@ -54,8 +54,7 @@
                 <label for="inp-time">Time (Duration: 2 Hours)
                     <select id="inp-time" name="appointment_time" required>
                         @for ($h = 10; $h <= 20; $h+=2)
-                            @php $hour = str_pad($h, 2, '0', STR_PAD_LEFT); @endphp
-                            <option value="{{ $hour }}:00:00" @selected(old('appointment_time', $appointment->appointment_time) == $hour.':00:00')>{{ $hour }}:00</option>
+                            <option value="{{ $h }}:00:00" @selected(old('appointment_time', $appointment->appointment_time) == $h.':00:00')>{{ $h }}:00</option>
                         @endfor
                     </select>
                 </label>
