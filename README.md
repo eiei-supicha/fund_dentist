@@ -70,13 +70,12 @@
 ## 📸 Screenshots (ภาพตัวอย่างระบบ)
 
 ### Home Page
-*(วางรูปตรงนี้)*
-
-### Login
-*(วางรูปตรงนี้)*
-
+<img width="1468" height="830" alt="ภาพถ่ายหน้าจอ 2568-12-12 เวลา 17 19 37" src="https://github.com/user-attachments/assets/bc9dfbaf-f018-4e60-a444-8dfbabfdf617" />
+<img width="1470" height="831" alt="ภาพถ่ายหน้าจอ 2568-12-12 เวลา 17 19 48" src="https://github.com/user-attachments/assets/9bb5808f-d155-4942-ac58-dd887f1e5398" />
 ### Appointment Table
-*(วางรูปตรงนี้)*
+<img width="1470" height="832" alt="ภาพถ่ายหน้าจอ 2568-12-12 เวลา 17 20 03" src="https://github.com/user-attachments/assets/05e51457-d8bb-48d1-aaa6-22393e142642" />
+<img width="1470" height="837" alt="ภาพถ่ายหน้าจอ 2568-12-12 เวลา 17 20 17" src="https://github.com/user-attachments/assets/76220513-bcd4-4f60-81cc-f1a66c3abef0" />
+
 
 ---
 
