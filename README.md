@@ -1,61 +1,89 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🦷 FunD Dentist – เว็บไซต์ระบบนัดหมายทันตแพทย์
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**FunD Dentist** คือเว็บแอปพลิเคชันสำหรับบริหารจัดการคลินิกทันตกรรม ช่วยอำนวยความสะดวกในการจัดการข้อมูลคนไข้ ทันตแพทย์ และตารางนัดหมาย เพื่อเพิ่มประสิทธิภาพการทำงานและลดภาระงานเอกสารของเจ้าหน้าที่
 
-## About Laravel
+## 👥 สมาชิกในทีม (Team Members)
+| รหัสนักศึกษา | ชื่อ-นามสกุล | หน้าที่ (Duty) |
+| :--- | :--- | :--- |
+| 662110060 | นนทพร เกตุขาว | Back-end Developer |
+| 662110093 | โยธกาจญน์ ทะนันไชย | Front-end Developer |
+| 662110105 | สุพิชา ศรีวิวัฒน์ | Back-end Developer |
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🛠️ เครื่องมือและเทคโนโลยี (Tools & Technologies)
+* **Language:** PHP (Laravel Framework)
+* **Database:** MySQL / SQLite
+* **Front-end:** Blade Template, CSS
+* **Tools:** Visual Studio Code, Git, Docker
+* **Library:** laravel-dompdf (สำหรับการออกรายงาน PDF)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ⚙️ กระบวนการพัฒนา (Development Process)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 1. Database Design
+ออกแบบฐานข้อมูลเพื่อรองรับการจัดเก็บข้อมูลคนไข้ (Patients), การนัดหมาย (Appointments), ทันตแพทย์ (Dentists) และผู้ใช้งาน (Users) โดยใช้ **ER Diagram** แสดงความสัมพันธ์ระหว่างตาราง เพื่อให้การจัดเก็บและเรียกใช้ข้อมูลเป็นระบบและมีประสิทธิภาพ
 
-## Learning Laravel
+### 2. Back-end Development
+พัฒนาส่วนหลังบ้านด้วย **Laravel Framework** ซึ่งมีความปลอดภัยและโครงสร้างแบบ MVC (Model-View-Controller) ที่ชัดเจน
+* จัดการ **Routes, Controllers, Models** เพื่อเชื่อมต่อฐานข้อมูล
+* ใช้ **Policies** เพื่อกำหนดสิทธิ์การเข้าถึงข้อมูล (Authorization)
+* พัฒนาระบบ CRUD (Create, Read, Update, Delete) สำหรับข้อมูลทุกส่วน
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 3. Front-end Development
+ออกแบบ User Interface (UI) โดยเน้นความเรียบง่าย สะอาดตา (Clean Design) และใช้งานง่าย (User-friendly) ครอบคลุมหน้าแสดงข้อมูลทันตแพทย์, ตารางนัดหมาย และโปรไฟล์ผู้ใช้งาน
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 4. Testing & Implementation
+ทำการทดสอบระบบ (System Testing) เพื่อตรวจสอบความถูกต้องของฟังก์ชันการทำงาน และแก้ไขข้อผิดพลาด (Bugs) ก่อนนำระบบไปใช้งานจริง
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🔒 นโยบายระบบและการจัดการสิทธิ์ (System Policy & Roles)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 👤 User Management (จัดการผู้ใช้งาน)
+* **Create:** เฉพาะ **ADMIN** เท่านั้นที่สร้างบัญชีใหม่ได้ และสามารถ "ผูก" บัญชี User เข้ากับ Dentist หรือ Patient ที่มีอยู่แล้ว
+* **Update:** เฉพาะ **ADMIN** สามารถแก้ไขข้อมูลผู้ใช้ได้
+* **Delete:** การลบ User จะเกิดขึ้นอัตโนมัติเมื่อข้อมูลหลัก (Dentist/Patient) ถูกลบ
+* **Read:**
+    * **ADMIN:** ดูรายชื่อผู้ใช้ได้ทั้งหมด
+    * **User ทั่วไป:** ดูได้เฉพาะข้อมูลของตนเอง (Self View)
 
-### Premium Partners
+### 👨‍⚕️ Dentist Management (จัดการทันตแพทย์)
+* **Create/Update/Delete:** เฉพาะ **ADMIN** เท่านั้น
+* **Read:**
+    * **ADMIN:** ดูข้อมูลทันตแพทย์ได้ทั้งหมด
+    * **Dentist/Patient:** ดูได้เฉพาะข้อมูลของตนเอง
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 🏥 Patient Management (จัดการคนไข้)
+* **Create/Update:** เฉพาะ **ADMIN** เท่านั้น
+* **Read:**
+    * **ADMIN:** ดูข้อมูลคนไข้ได้ทั้งหมด
+    * **Dentist/Patient:** ดูได้เฉพาะข้อมูลของตนเอง
 
-## Contributing
+### 📅 Appointment Management (จัดการนัดหมาย)
+* **Create:** เฉพาะ **ADMIN** สร้างนัดหมายใหม่ได้
+* **Read:**
+    * **ADMIN:** ดูได้ "ทั้งหมด"
+    * **DENTIST:** ดูได้ "เฉพาะ" นัดหมายที่ตนเองเป็นผู้ตรวจ
+    * **PATIENT:** ดูได้ "เฉพาะ" นัดหมายของตนเอง
+* **Update/Delete:** เฉพาะ **ADMIN** เท่านั้น
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 📸 Screenshots (ภาพตัวอย่างระบบ)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Home Page
+*(วางรูปตรงนี้)*
 
-## Security Vulnerabilities
+### Login
+*(วางรูปตรงนี้)*
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Appointment Table
+*(วางรูปตรงนี้)*
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 💡 บทสรุปและข้อเสนอแนะ (Conclusion & Suggestions)
+ระบบ **"FunD Dentist"** สามารถตอบโจทย์การจัดการคลินิกทันตกรรมเบื้องต้นได้เป็นอย่างดี ช่วยให้การบริหารข้อมูลทันตแพทย์ คนไข้ และการนัดหมายเป็นไปอย่างมีประสิทธิภาพ
+
+**แผนพัฒนาในอนาคต (Future Enhancements)**
+1. **Notification System:** เพิ่มระบบแจ้งเตือนผ่าน E-mail หรือ SMS เพื่อยืนยันและเตือนนัดหมายคนไข้
+2. **Dentist Schedule:** เพิ่มฟังก์ชันให้ทันตแพทย์กำหนด "ตารางงาน" (Availability) ของตนเองได้ เพื่อให้ระบบตรวจสอบคิวว่างได้แม่นยำขึ้น
+3. **Treatment Records:** ขยายระบบให้รองรับการบันทึกประวัติการรักษา (OPD Card) และหมายเหตุทางการแพทย์
